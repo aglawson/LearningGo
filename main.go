@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -23,10 +24,15 @@ type Response struct {
 
 var res = Response{Success: true, Data: "wut"}
 
+const KEY = "<YOUR-KEY-HERE>"
+
 var users = []User{
 	{ID: 1, Name: "John Doe"},
 	{ID: 2, Name: "Jane Doe"},
 }
+
+// Connect to an Ethereum node
+var client, err = ethclient.Dial("https://eth-mainnet.g.alchemy.com/v2/" + KEY)
 
 func main() {
 	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
@@ -56,18 +62,32 @@ func main() {
 	http.HandleFunc("/getBlock", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		// Connect to an Ethereum node
-		client, err := ethclient.Dial("https://eth-mainnet.g.alchemy.com/v2/<YOUR-KEY-HERE>")
-		if err != nil {
-			fmt.Println("Error connecting to Ethereum node:", err)
-			return
-		}
-
 		// Retrieve the latest block number
 		blockNumber, err := client.BlockByNumber(context.Background(), nil)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
 		// fmt.Println(blockNumber.NumberU64())
 		res.Data = strconv.Itoa(int(blockNumber.NumberU64()))
 		json.NewEncoder(w).Encode(res)
+	})
+
+	http.HandleFunc("/getBalance", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		queryParams := r.URL.Query()
+		address := queryParams.Get("wallet")
+		blockNumber, err := client.BlockByNumber(context.Background(), nil)
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+		// Retrieve the latest block number
+		balance, err := client.BalanceAt(context.Background(), common.HexToAddress(address), blockNumber.Number())
+		if err != nil {
+			fmt.Println("Error: ", err)
+		}
+		// fmt.Println(blockNumber.NumberU64())
+		//res.Data = strconv.Itoa(balance)
+		json.NewEncoder(w).Encode(balance)
 	})
 
 	err := http.ListenAndServe(":8080", nil)
@@ -77,4 +97,5 @@ func main() {
 
 		panic(res)
 	}
+
 }
