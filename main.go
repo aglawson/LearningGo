@@ -2,12 +2,16 @@ package main
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
@@ -88,6 +92,39 @@ func main() {
 		// fmt.Println(blockNumber.NumberU64())
 		//res.Data = strconv.Itoa(balance)
 		json.NewEncoder(w).Encode(balance)
+	})
+
+	http.HandleFunc("/createWallet", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		privateKey, err := crypto.GenerateKey()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		privateKeyBytes := crypto.FromECDSA(privateKey)
+		//fmt.Println(hexutil.Encode(privateKeyBytes)[2:])
+
+		publicKey := privateKey.Public()
+		publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+		// publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
+		address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
+
+		if !ok {
+			log.Fatal("error casting public key to ECDSA")
+		}
+
+		type Result struct {
+			PrivateKey string
+			Address    string
+		}
+		result := Result{PrivateKey: hexutil.Encode(privateKeyBytes)[2:], Address: address}
+
+		// hash := sha3.NewKeccak256()
+		// hash.Write(publicKeyBytes[1:])
+		// fmt.Println(hexutil.Encode(hash.Sum(nil)[12:]))
+
+		json.NewEncoder(w).Encode(result)
 	})
 
 	err := http.ListenAndServe(":8080", nil)
