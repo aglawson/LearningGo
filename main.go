@@ -59,17 +59,14 @@ func getBalance(address string) *big.Int {
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
+
 	blockNumber, err := client.BlockByNumber(context.Background(), nil)
-	if err != nil {
-		fmt.Println("Error: ", err)
-	}
-	// Retrieve the latest block number
-	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(address), blockNumber.Number())
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
 
 	// Retrieve the latest block number
+	balance, err := client.BalanceAt(context.Background(), common.HexToAddress(address), blockNumber.Number())
 	if err != nil {
 		fmt.Println("Error: ", err)
 	}
