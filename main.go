@@ -15,19 +15,13 @@ type Response struct {
 
 var res = Response{Success: true, Data: "wut"}
 
-// Connect to an Ethereum node
-type Result struct {
-	PrivateKey string
-	Address    string
-}
-
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(res)
 	})
 
-	http.HandleFunc("/getBlock", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/get_block", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		queryParams := r.URL.Query()
 
@@ -39,7 +33,7 @@ func main() {
 		json.NewEncoder(w).Encode(res)
 	})
 
-	http.HandleFunc("/getBalance", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/get_balance", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		queryParams := r.URL.Query()
 
