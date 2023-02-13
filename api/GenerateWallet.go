@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"crypto/ecdsa"
@@ -13,7 +13,7 @@ type Result struct {
 	Address    string
 }
 
-func createWallet() Result {
+func CreateWallet() Result {
 	privateKey, err := crypto.GenerateKey()
 	if err != nil {
 		log.Fatal(err)
