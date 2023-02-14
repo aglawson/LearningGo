@@ -27,6 +27,5 @@ func GetTokenBalance(wallet string, contract string, network string) big.Int {
 		fmt.Println("error with tx", err)
 		return *big.NewInt(-2)
 	}
-	fmt.Println(tx)
 	return *tx
 }
