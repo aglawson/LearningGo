@@ -17,7 +17,6 @@ func GetTokenBalance(wallet string, contract string, network string) big.Int {
 	}
 
 	walletAddress := common.HexToAddress(wallet)
-	//caller := bind.ContractCaller
 	contractAddress := common.HexToAddress(contract)
 
 	nft, err := contracts.NewIERC721ACaller(contractAddress, client)
@@ -27,5 +26,6 @@ func GetTokenBalance(wallet string, contract string, network string) big.Int {
 		fmt.Println("error with tx", err)
 		return *big.NewInt(-2)
 	}
+
 	return *tx
 }
