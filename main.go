@@ -13,7 +13,7 @@ type Response struct {
 	Data    string `json:"data"`
 }
 
-var res = Response{Success: true, Data: "wut"}
+var res = Response{Success: true, Data: "connected"}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -62,6 +62,18 @@ func main() {
 		gasPrice := api.GetGasPrice(network)
 
 		json.NewEncoder(w).Encode(gasPrice)
+	})
+
+	http.HandleFunc("/get_token_balance", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		query := r.URL.Query()
+		wallet := query.Get("wallet")
+		contract := query.Get("contract")
+		network := query.Get("network")
+
+		result := api.GetTokenBalance(wallet, contract, network)
+
+		json.NewEncoder(w).Encode(result.String())
 	})
 
 	err := http.ListenAndServe(":8080", nil)
