@@ -27,3 +27,9 @@ A full Web3 API that allows users to query and interact with the blockchain, as 
     * contract - smart contract of asset
       * NOTE: can be either an NFT or an ERC20 token
   * Returns the current number of assets under contract that wallet owns on network
+  
+* /[get_token_supply](https://github.com/aglawson/Web3API-Go/blob/main/api/GetTokenSupply.go)
+  * Params:
+    * network - string representing desired network (ex. mainnet, goerli, polygon-mainnet)
+    * contract - smart contract of asset
+      * NOTE: can be either NFT or ERC20 token
