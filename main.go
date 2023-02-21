@@ -76,6 +76,17 @@ func main() {
 		json.NewEncoder(w).Encode(result.String())
 	})
 
+	http.HandleFunc("/get_token_supply", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		query := r.URL.Query()
+		contract := query.Get("contract")
+		network := query.Get("network")
+
+		result := api.GetTokenSupply(contract, network)
+
+		json.NewEncoder(w).Encode(result.String())
+	})
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		res.Success = false
