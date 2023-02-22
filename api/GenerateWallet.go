@@ -20,11 +20,9 @@ func CreateWallet() Result {
 	}
 
 	privateKeyBytes := crypto.FromECDSA(privateKey)
-	//fmt.Println(hexutil.Encode(privateKeyBytes)[2:])
 
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
-	// publicKeyBytes := crypto.FromECDSAPub(publicKeyECDSA)
 	address := crypto.PubkeyToAddress(*publicKeyECDSA).Hex()
 
 	if !ok {
