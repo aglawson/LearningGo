@@ -37,3 +37,11 @@ Add the desired endpoint and necessary parameters.
     * network - string representing desired network (ex. mainnet, goerli, polygon-mainnet)
     * contract - smart contract of asset
       * NOTE: can be either NFT or ERC20 token
+
+* /[is_token_holder](https://github.com/aglawson/Web3API-Go/blob/main/api/IsTokenHolder.go)
+  * Params:
+    * wallet - address of wallet in question
+    * network - string representing desired network (ex. mainnet, goerli, polygon-mainnet)
+    * contract - smart contract of asset
+      * NOTE: can be either NFT or ERC20 token
+  * Returns boolean value. If wallet owns 1 or more tokens from contract -> true; otherwise -> false;
