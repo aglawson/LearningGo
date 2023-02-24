@@ -128,6 +128,60 @@ func main() {
 		json.NewEncoder(w).Encode(result.String())
 	})
 
+	http.HandleFunc("/get_owned_ids", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		query := r.URL.Query()
+		wallet := query.Get("wallet")
+		contract := query.Get("contract")
+		network := query.Get("network")
+
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
+		if wallet == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+			return
+		}
+		if contract == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
+			return
+		}
+
+		result, err := api.GetOwnedIds(wallet, contract, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+		}
+		json.NewEncoder(w).Encode(result)
+	})
+
+	http.HandleFunc("/is_token_holder", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		query := r.URL.Query()
+		wallet := query.Get("wallet")
+		contract := query.Get("contract")
+		network := query.Get("network")
+
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
+		if wallet == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+			return
+		}
+		if contract == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
+			return
+		}
+
+		result, err := api.IsTokenHolder(wallet, contract, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+		}
+		json.NewEncoder(w).Encode(result)
+	})
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		res.Success = false
