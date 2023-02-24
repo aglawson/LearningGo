@@ -3,7 +3,7 @@ A full Web3 API that allows users to query and interact with the blockchain, as 
 
 ## API URL
 You can test this API for yourself by using [this](https://go-api-378801.wl.r.appspot.com/) base link.
-Add the desired endpoints and necessary parameters.
+Add the desired endpoint and necessary parameters.
 
 ## Endpoints
 * /[get_block](https://github.com/aglawson/Web3API-Go/blob/main/api/GetBlock.go)
