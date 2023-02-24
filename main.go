@@ -26,8 +26,9 @@ func main() {
 		queryParams := r.URL.Query()
 
 		network := queryParams.Get("network")
+
 		if network == "" {
-			json.NewEncoder(w).Encode("network undefined")
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
 			return
 		}
 
@@ -43,6 +44,15 @@ func main() {
 
 		address := queryParams.Get("wallet")
 		network := queryParams.Get("network")
+
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
+		if address == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+			return
+		}
 
 		balance := api.GetBalance(address, network)
 
@@ -63,6 +73,11 @@ func main() {
 		queryParams := r.URL.Query()
 		network := queryParams.Get("network")
 
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
+
 		gasPrice := api.GetGasPrice(network)
 
 		json.NewEncoder(w).Encode(gasPrice)
@@ -75,6 +90,19 @@ func main() {
 		contract := query.Get("contract")
 		network := query.Get("network")
 
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
+		if wallet == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+			return
+		}
+		if contract == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
+			return
+		}
+
 		result := api.GetTokenBalance(wallet, contract, network)
 
 		json.NewEncoder(w).Encode(result.String())
@@ -85,6 +113,15 @@ func main() {
 		query := r.URL.Query()
 		contract := query.Get("contract")
 		network := query.Get("network")
+
+		if contract == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
+			return
+		}
+		if network == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+			return
+		}
 
 		result := api.GetTokenSupply(contract, network)
 
