@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"math/big"
 	"web3/contracts"
 
@@ -9,11 +8,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func GetTokenSupply(contract string, network string) big.Int {
+func GetTokenSupply(contract string, network string) (big.Int, error) {
 	var client, err = ethclient.Dial(GetRPC(network))
 	if err != nil {
-		fmt.Println(err)
-		return *big.NewInt(-1)
+		return *big.NewInt(-1), err
 	}
 
 	contractAddress := common.HexToAddress(contract)
@@ -23,9 +21,8 @@ func GetTokenSupply(contract string, network string) big.Int {
 	supply, err := nft.TotalSupply(nil)
 
 	if err != nil {
-		fmt.Println("error with tx", err)
-		return *big.NewInt(-2)
+		return *big.NewInt(-2), err
 	}
 
-	return *supply
+	return *supply, nil
 }

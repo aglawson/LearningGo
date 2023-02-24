@@ -32,7 +32,11 @@ func main() {
 			return
 		}
 
-		blockNumber := api.GetBlock(network)
+		blockNumber, err := api.GetBlock(network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		res.Data = strconv.Itoa(int(blockNumber.NumberU64()))
 		json.NewEncoder(w).Encode(res)
@@ -54,7 +58,11 @@ func main() {
 			return
 		}
 
-		balance := api.GetBalance(address, network)
+		balance, err := api.GetBalance(address, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		json.NewEncoder(w).Encode(balance)
 	})
@@ -78,7 +86,11 @@ func main() {
 			return
 		}
 
-		gasPrice := api.GetGasPrice(network)
+		gasPrice, err := api.GetGasPrice(network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		json.NewEncoder(w).Encode(gasPrice)
 	})
@@ -103,7 +115,11 @@ func main() {
 			return
 		}
 
-		result := api.GetTokenBalance(wallet, contract, network)
+		result, err := api.GetTokenBalance(wallet, contract, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		json.NewEncoder(w).Encode(result.String())
 	})
@@ -123,7 +139,11 @@ func main() {
 			return
 		}
 
-		result := api.GetTokenSupply(contract, network)
+		result, err := api.GetTokenSupply(contract, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+			return
+		}
 
 		json.NewEncoder(w).Encode(result.String())
 	})

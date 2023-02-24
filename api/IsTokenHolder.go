@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"math/big"
 	"web3/contracts"
 
@@ -12,7 +11,6 @@ import (
 func IsTokenHolder(wallet string, contract string, network string) (bool, error) {
 	var client, err = ethclient.Dial(GetRPC(network))
 	if err != nil {
-		fmt.Println(err)
 		return false, err
 	}
 
@@ -23,7 +21,6 @@ func IsTokenHolder(wallet string, contract string, network string) (bool, error)
 
 	tx, err := nft.BalanceOf(nil, walletAddress)
 	if err != nil {
-		fmt.Println("error with tx", err)
 		return false, err
 	}
 

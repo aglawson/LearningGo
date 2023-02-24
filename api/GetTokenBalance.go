@@ -9,11 +9,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func GetTokenBalance(wallet string, contract string, network string) big.Int {
+func GetTokenBalance(wallet string, contract string, network string) (big.Int, error) {
 	var client, err = ethclient.Dial(GetRPC(network))
 	if err != nil {
-		fmt.Println(err)
-		return *big.NewInt(-1)
+		return *big.NewInt(-1), err
 	}
 
 	walletAddress := common.HexToAddress(wallet)
@@ -24,8 +23,8 @@ func GetTokenBalance(wallet string, contract string, network string) big.Int {
 	tx, err := nft.BalanceOf(nil, walletAddress)
 	if err != nil {
 		fmt.Println("error with tx", err)
-		return *big.NewInt(-2)
+		return *big.NewInt(-2), err
 	}
 
-	return *tx
+	return *tx, nil
 }

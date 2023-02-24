@@ -8,14 +8,14 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func GetGasPrice(network string) *big.Int {
+func GetGasPrice(network string) (*big.Int, error) {
 	var client, err = ethclient.Dial(GetRPC(network))
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
 		fmt.Println(err)
-		return big.NewInt(-1)
+		return nil, err
 	}
 
 	//fmt.Println("Gas price:", gasPrice)
-	return gasPrice
+	return gasPrice, nil
 }

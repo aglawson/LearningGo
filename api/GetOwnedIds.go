@@ -21,10 +21,12 @@ func GetOwnedIds(wallet string, contract string, network string) ([]*big.Int, er
 	nft, err := contracts.NewIERC721ACaller(contractAddress, client)
 
 	amount, err := nft.TotalSupply(nil)
-	balance := GetTokenBalance(wallet, contract, network)
-
 	if err != nil {
-		fmt.Println("error with tx", err)
+		return nil, err
+	}
+
+	balance, err := GetTokenBalance(wallet, contract, network)
+	if err != nil {
 		return nil, err
 	}
 
