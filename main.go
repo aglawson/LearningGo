@@ -26,6 +26,10 @@ func main() {
 		queryParams := r.URL.Query()
 
 		network := queryParams.Get("network")
+		if network == "" {
+			json.NewEncoder(w).Encode("network undefined")
+			return
+		}
 
 		blockNumber := api.GetBlock(network)
 
