@@ -16,6 +16,5 @@ func GetGasPrice(network string) (*big.Int, error) {
 		return nil, err
 	}
 
-	//fmt.Println("Gas price:", gasPrice)
 	return gasPrice, nil
 }
