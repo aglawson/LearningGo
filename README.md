@@ -45,3 +45,9 @@ Add the desired endpoint and necessary parameters.
     * contract - smart contract of asset
       * NOTE: can be either NFT or ERC20 token
   * Returns boolean value. If wallet owns 1 or more tokens from contract -> true; otherwise -> false;
+
+* /[get_coin_price](https://github.com/aglawson/Web3API-Go/blob/main/api/GetCoinPrice.go)
+  * Params:
+    * from: name of coin to inquire about (eg. 'ethereum', 'bitcoin')
+    * to: name of currency to convert to (eg. 'usd', 'vnd')
+  * Returns float representing the amount of 'to' that equates to 1 'from'
