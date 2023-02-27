@@ -15,7 +15,7 @@ type CoinGeckoResponse struct {
 
 func GetCoinPrice(from string, to string) (float64, error) {
 
-	if from == "polygon" {
+	if from == "polygon" || from == "matic" {
 		from = "wmatic"
 	}
 
