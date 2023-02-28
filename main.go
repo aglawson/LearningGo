@@ -209,6 +209,15 @@ func main() {
 		from := query.Get("from")
 		to := query.Get("to")
 
+		if from == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'from' is undefined`)
+			return
+		}
+		if to == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'to' is undefined`)
+			return
+		}
+
 		result, err := api.GetCoinPrice(from, to)
 
 		if err != nil {
@@ -223,6 +232,15 @@ func main() {
 
 		from := query.Get("from")
 		to := query.Get("to")
+
+		if from == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'from' is undefined`)
+			return
+		}
+		if to == "" {
+			json.NewEncoder(w).Encode(`expected parameter 'to' is undefined`)
+			return
+		}
 
 		result, err := api.WriteCoinPrice(from, to)
 
