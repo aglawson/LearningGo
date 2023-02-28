@@ -54,6 +54,6 @@ Add the desired endpoint and necessary parameters.
 
 * /[write_coin_price](https://github.com/aglawson/Web3API-Go/blob/main/api/WriteCoinPrice.go)
   * Params:
-    * from: name of coin to inquire about (supported: 'ethereum')
-    * to: name of currency to convert to (supported: 'usd', 'vnd')
+    * from: name of coin to inquire about (eg. 'ethereum')
+    * to: name of currency to convert to (eg. 'usd', 'vnd')
   * Writes to connected Firestore DB the current amount of 'to' that equates to 1 'from'
