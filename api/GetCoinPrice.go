@@ -1,18 +1,18 @@
 package api
 
 import (
+	"context"
 	"log"
 
-	"context"
-
+	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 )
 
 type Price struct {
-	From  string
-	To    string
-	Value interface{}
-	Time  interface{}
+	From  string      `json:"from"`
+	To    string      `json:"to"`
+	Value interface{} `json:"value"`
+	Time  interface{} `json:"time"`
 }
 
 func GetCoinPrice(from string, to string) (Price, error) {
@@ -30,9 +30,13 @@ func GetCoinPrice(from string, to string) (Price, error) {
 	}
 	defer client.Close()
 
-	iter := client.Collection("prices").Where("from", "==", from).Documents(ctx)
+	query := client.Collection("prices").OrderBy("time", firestore.Desc)
+
+	iter := query.Documents(ctx)
+
 	for {
 		doc, err := iter.Next()
+
 		if err != nil {
 			return Price{}, err
 		}
