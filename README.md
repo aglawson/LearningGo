@@ -48,6 +48,6 @@ Add the desired endpoint and necessary parameters.
 
 * /[get_coin_price](https://github.com/aglawson/Web3API-Go/blob/main/api/GetCoinPrice.go)
   * Params:
-    * from: name of coin to inquire about (eg. 'ethereum', 'bitcoin')
-    * to: name of currency to convert to (eg. 'usd', 'vnd')
+    * from: name of coin to inquire about (supported: 'ethereum')
+    * to: name of currency to convert to (supported: 'usd', 'vnd')
   * Returns float representing the amount of 'to' that equates to 1 'from'
