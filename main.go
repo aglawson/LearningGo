@@ -217,6 +217,21 @@ func main() {
 		json.NewEncoder(w).Encode(result)
 	})
 
+	http.HandleFunc("/write_coin_price", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		query := r.URL.Query()
+
+		from := query.Get("from")
+		to := query.Get("to")
+
+		result, err := api.WriteCoinPrice(from, to)
+
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+		}
+		json.NewEncoder(w).Encode(result)
+	})
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		res.Success = false
