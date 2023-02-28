@@ -39,7 +39,7 @@ func WriteCoinPrice(from string, to string) (float64, error) {
 		from = "bitcoin"
 	}
 
-	url := "https://api.coingecko.com/api/v3/simple/price?ids=" + from + "&vs_currencies=" + to //"https://api.coingecko.com/api/v3/simple/price?ids=" + name + "&vs_currencies=usd"
+	url := "https://api.coingecko.com/api/v3/simple/price?ids=" + from + "&vs_currencies=" + to
 
 	resp, err := http.Get(url)
 	if err != nil {
