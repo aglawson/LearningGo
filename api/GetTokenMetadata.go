@@ -4,14 +4,16 @@ import (
 	"math/big"
 	"web3/contracts"
 
+	"fmt"
+
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type Metadata struct {
-	Name        string  `json:"name"`
-	Symbol      string  `json:"symbol"`
-	TotalSupply big.Int `json:"totalSupply"`
+	Name        string   `json:"name"`
+	Symbol      string   `json:"symbol"`
+	TotalSupply *big.Int `json:"totalSupply"`
 }
 
 func GetTokenMetadata(contract string, network string) (Metadata, error) {
@@ -29,6 +31,7 @@ func GetTokenMetadata(contract string, network string) (Metadata, error) {
 	}
 
 	supply, err := token.TotalSupply(nil)
+	fmt.Println(supply)
 	if err != nil {
 		return metadata, err
 	}
@@ -46,7 +49,7 @@ func GetTokenMetadata(contract string, network string) (Metadata, error) {
 	metadata = Metadata{
 		Name:        name,
 		Symbol:      symbol,
-		TotalSupply: *supply,
+		TotalSupply: supply,
 	}
 
 	if err != nil {
