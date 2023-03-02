@@ -13,7 +13,18 @@ type Response struct {
 	Data    string `json:"data"`
 }
 
-var res = Response{Success: true, Data: "connected"}
+var res = Response{Success: true, Data: "Possible Endpoints: get_block, get_balance, create_wallet, get_token_balance, get_gas_price, get_token_supply, get_owned_ids, is_token_holder, get_coin_price"}
+
+func get(param string, r *http.Request) (string, string) {
+	query := r.URL.Query()
+	value := query.Get(param)
+
+	if value == "" {
+		return "", "expected parameter " + param + " was undefined"
+	}
+
+	return value, ""
+}
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -23,13 +34,10 @@ func main() {
 
 	http.HandleFunc("/get_block", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		queryParams := r.URL.Query()
+		network, errString := get("network", r)
 
-		network := queryParams.Get("network")
-
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
-			return
+		if errString != "" {
+			network = "mainnet"
 		}
 
 		blockNumber, err := api.GetBlock(network)
@@ -44,17 +52,16 @@ func main() {
 
 	http.HandleFunc("/get_balance", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		queryParams := r.URL.Query()
 
-		address := queryParams.Get("wallet")
-		network := queryParams.Get("network")
+		network, errString := get("network", r)
 
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
-			return
+		if errString != "" {
+			network = "mainnet"
 		}
-		if address == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+
+		address, errString := get("wallet", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
 
@@ -78,12 +85,10 @@ func main() {
 	http.HandleFunc("/get_gas_price", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 
-		queryParams := r.URL.Query()
-		network := queryParams.Get("network")
+		network, errString := get("network", r)
 
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
-			return
+		if errString != "" {
+			network = "mainnet"
 		}
 
 		gasPrice, err := api.GetGasPrice(network)
@@ -97,21 +102,21 @@ func main() {
 
 	http.HandleFunc("/get_token_balance", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
-		wallet := query.Get("wallet")
-		contract := query.Get("contract")
-		network := query.Get("network")
 
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+		network, errString := get("network", r)
+		if errString != "" {
+			network = "mainnet"
+		}
+
+		wallet, errString := get("wallet", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
-		if wallet == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
-			return
-		}
-		if contract == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
+
+		contract, errString := get("contract", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
 
@@ -126,16 +131,14 @@ func main() {
 
 	http.HandleFunc("/get_token_supply", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
-		contract := query.Get("contract")
-		network := query.Get("network")
-
-		if contract == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
-			return
+		network, errString := get("network", r)
+		if errString != "" {
+			network = "mainnet"
 		}
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+
+		contract, errString := get("contract", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
 
@@ -150,22 +153,22 @@ func main() {
 
 	http.HandleFunc("/get_owned_ids", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
-		wallet := query.Get("wallet")
-		contract := query.Get("contract")
-		network := query.Get("network")
 
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+		wallet, errString := get("wallet", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
-		if wallet == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
+
+		contract, errString := get("contract", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
-		if contract == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
-			return
+
+		network, errString := get("network", r)
+		if errString != "" {
+			network = "mainnet"
 		}
 
 		result, err := api.GetOwnedIds(wallet, contract, network)
@@ -177,22 +180,21 @@ func main() {
 
 	http.HandleFunc("/is_token_holder", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
-		wallet := query.Get("wallet")
-		contract := query.Get("contract")
-		network := query.Get("network")
+		wallet, errString := get("wallet", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
+			return
+		}
 
-		if network == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'network' is undefined`)
+		contract, errString := get("contract", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
-		if wallet == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'wallet' is undefined`)
-			return
-		}
-		if contract == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'contract' is undefined`)
-			return
+
+		network, errString := get("network", r)
+		if errString != "" {
+			network = "mainnet"
 		}
 
 		result, err := api.IsTokenHolder(wallet, contract, network)
@@ -204,17 +206,12 @@ func main() {
 
 	http.HandleFunc("/get_coin_price", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
 
-		from := query.Get("from")
-		to := query.Get("to")
+		from, errString := get("from", r)
+		to, errString := get("to", r)
 
-		if from == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'from' is undefined`)
-			return
-		}
-		if to == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'to' is undefined`)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
 
@@ -228,17 +225,12 @@ func main() {
 
 	http.HandleFunc("/write_coin_price", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		query := r.URL.Query()
 
-		from := query.Get("from")
-		to := query.Get("to")
+		from, errString := get("from", r)
+		to, errString := get("to", r)
 
-		if from == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'from' is undefined`)
-			return
-		}
-		if to == "" {
-			json.NewEncoder(w).Encode(`expected parameter 'to' is undefined`)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
 			return
 		}
 
@@ -247,6 +239,28 @@ func main() {
 		if err != nil {
 			json.NewEncoder(w).Encode(err)
 		}
+		json.NewEncoder(w).Encode(result)
+	})
+
+	http.HandleFunc("/get_token_metadata", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		contract, errString := get("contract", r)
+		if errString != "" {
+			json.NewEncoder(w).Encode(errString)
+			return
+		}
+
+		network, errString := get("network", r)
+		if network == "" {
+			network = "mainnet"
+		}
+
+		result, err := api.GetTokenMetadata(contract, network)
+		if err != nil {
+			json.NewEncoder(w).Encode(err)
+		}
+
 		json.NewEncoder(w).Encode(result)
 	})
 
